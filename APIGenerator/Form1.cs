@@ -392,6 +392,7 @@ namespace " + apiName + @".WebAPI
 
             File.WriteAllText(programFilePath, programFileContent);
         }
+        
 
         public void RunMigrationsAndUpdates(string apiProjectPath, string infrastructureProjectPath, string migrationName, string dbContextName)
         {
