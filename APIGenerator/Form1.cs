@@ -147,13 +147,6 @@ namespace APIGenerator
             CreateOrUpdateProgramFile(apiName, apiPath);
 
             UpdateProgressBar(50);
-            UpdateLabel("running migrations...");
-
-            string migrationPath = Path.Combine(apiPath, $"{apiName}.WebAPI");
-            string infrastructurePath = Path.Combine(apiPath, $"{apiName}.Infrastructure");
-            RunMigrationsAndUpdates(migrationPath, infrastructurePath, "InitialCreate", "ApplicationDbContext");
-
-            UpdateProgressBar(75);
             UpdateLabel("creating repositories...");
 
             // Generate repositories
@@ -173,6 +166,20 @@ namespace APIGenerator
             }
 
             UpdateStartupForRepositoriesAndServices(apiName, apiPath);
+
+            // Generate controllers
+            foreach (var sheetEntry in sheetsData)
+            {
+                string className = sheetEntry.Key;
+                GenerateController(apiName, apiPath, className);
+            }
+
+            UpdateProgressBar(75);
+            UpdateLabel("running migrations...");
+
+            string migrationPath = Path.Combine(apiPath, $"{apiName}.WebAPI");
+            string infrastructurePath = Path.Combine(apiPath, $"{apiName}.Infrastructure");
+            RunMigrationsAndUpdates(migrationPath, infrastructurePath, "InitialCreate", "ApplicationDbContext");
         }
 
         private void GenerateModelClassesFromData(Dictionary<string, List<Tuple<string, string>>> sheetsData, string modelClassPath)
@@ -567,6 +574,92 @@ namespace " + apiName + @".WebAPI
             File.WriteAllText(classPath, classContent.ToString());
         }
 
+        public static void GenerateController(string apiName, string apiPath, string className)
+        {
+            StringBuilder controllerContent = new StringBuilder();
+            controllerContent.AppendLine("using Microsoft.AspNetCore.Mvc;");
+            controllerContent.AppendLine($"using {apiName}.Application.IService;");
+            controllerContent.AppendLine("using System.Collections.Generic;"); // For IEnumerable
+            controllerContent.AppendLine();
+            controllerContent.AppendLine($"namespace {apiName}.Api.Controllers");
+            controllerContent.AppendLine("{");
+            controllerContent.AppendLine("    [ApiController]");
+            controllerContent.AppendLine("    [Route(\"api/[controller]\")]");
+            controllerContent.AppendLine($"    public class {className}Controller : ControllerBase");
+            controllerContent.AppendLine("    {");
+            controllerContent.AppendLine($"        private readonly I{className}Service _service;");
+            controllerContent.AppendLine();
+            controllerContent.AppendLine($"        public {className}Controller(I{className}Service service)");
+            controllerContent.AppendLine("        {");
+            controllerContent.AppendLine("            _service = service;");
+            controllerContent.AppendLine("        }");
+            controllerContent.AppendLine();
+
+            // GetAll action method
+            controllerContent.AppendLine("        [HttpGet(\"GetAll\")]");
+            controllerContent.AppendLine($"        public ActionResult<IEnumerable<{className}>> GetAll()");
+            controllerContent.AppendLine("        {");
+            controllerContent.AppendLine("            return Ok(_service.GetAll());");
+            controllerContent.AppendLine("        }");
+            controllerContent.AppendLine();
+
+            // GetById action method
+            controllerContent.AppendLine("        [HttpGet(\"GetById/{id}\")]");
+            controllerContent.AppendLine($"        public ActionResult<{className}> GetById(int id)");
+            controllerContent.AppendLine("        {");
+            controllerContent.AppendLine("            var item = _service.GetById(id);");
+            controllerContent.AppendLine("            if (item == null)");
+            controllerContent.AppendLine("            {");
+            controllerContent.AppendLine("                return NotFound();");
+            controllerContent.AppendLine("            }");
+            controllerContent.AppendLine("            return Ok(item);");
+            controllerContent.AppendLine("        }");
+            controllerContent.AppendLine();
+
+            // Add action method
+            controllerContent.AppendLine("        [HttpPost(\"Add\")]");
+            controllerContent.AppendLine($"        public IActionResult Add([FromBody] {className} entity)");
+            controllerContent.AppendLine("        {");
+            controllerContent.AppendLine("            _service.Add(entity);");
+            controllerContent.AppendLine("            return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity);");
+            controllerContent.AppendLine("        }");
+            controllerContent.AppendLine();
+
+            // Update action method
+            controllerContent.AppendLine("        [HttpPut(\"Update/{id}\")]");
+            controllerContent.AppendLine($"        public IActionResult Update(int id, [FromBody] {className} entity)");
+            controllerContent.AppendLine("        {");
+            controllerContent.AppendLine("            if (id != entity.Id)");
+            controllerContent.AppendLine("            {");
+            controllerContent.AppendLine("                return BadRequest();");
+            controllerContent.AppendLine("            }");
+            controllerContent.AppendLine("            _service.Update(entity);");
+            controllerContent.AppendLine("            return NoContent();");
+            controllerContent.AppendLine("        }");
+            controllerContent.AppendLine();
+
+            // Delete action method
+            controllerContent.AppendLine("        [HttpDelete(\"Delete/{id}\")]");
+            controllerContent.AppendLine("        public IActionResult Delete(int id)");
+            controllerContent.AppendLine("        {");
+            controllerContent.AppendLine("            var existingItem = _service.GetById(id);");
+            controllerContent.AppendLine("            if (existingItem == null)");
+            controllerContent.AppendLine("            {");
+            controllerContent.AppendLine("                return NotFound();");
+            controllerContent.AppendLine("            }");
+            controllerContent.AppendLine("            _service.Delete(id);");
+            controllerContent.AppendLine("            return NoContent();");
+            controllerContent.AppendLine("        }");
+
+            controllerContent.AppendLine("    }");
+            controllerContent.AppendLine("}");
+
+            string controllerDirectory = Path.Combine(apiPath, $"{apiName}.WebAPI", "Controllers");
+            Directory.CreateDirectory(controllerDirectory);
+            string controllerPath = Path.Combine(controllerDirectory, $"{className}Controller.cs");
+            File.WriteAllText(controllerPath, controllerContent.ToString());
+        }
+
         private void UpdateStartupForRepositoriesAndServices(string apiName, string apiPath)
         {
             string startupPath = Path.Combine(apiPath, $"{apiName}.WebAPI", "Startup.cs");
@@ -590,7 +683,7 @@ namespace " + apiName + @".WebAPI
             }
         }
 
-        private void ExecuteCommand(string command, string workingDirectory = null)
+        private void ExecuteCommand(string command, string? workingDirectory = null)
         {
             var process = new Process
             {
@@ -602,7 +695,7 @@ namespace " + apiName + @".WebAPI
                     RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    WorkingDirectory = workingDirectory ?? Directory.GetCurrentDirectory() // use the provided directory or the current one
+                    WorkingDirectory = workingDirectory != null ? workingDirectory : Directory.GetCurrentDirectory() // use the provided directory or the current one
                 }
             };
 
