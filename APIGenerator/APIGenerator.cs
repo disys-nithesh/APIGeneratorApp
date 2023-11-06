@@ -509,6 +509,7 @@ namespace APIGenerator
             classContent.AppendLine($"        public void Add({className} entity)");
             classContent.AppendLine("        {");
             classContent.AppendLine($"            _context.{className}Set.Add(entity);");
+            classContent.AppendLine($"            _context.SaveChanges();");
             classContent.AppendLine("        }");
 
             // Update method
@@ -516,6 +517,7 @@ namespace APIGenerator
             classContent.AppendLine($"        public void Update({className} entity)");
             classContent.AppendLine("        {");
             classContent.AppendLine($"            _context.{className}Set.Update(entity);");
+            classContent.AppendLine($"            _context.SaveChanges();");
             classContent.AppendLine("        }");
 
             // Delete method
@@ -526,6 +528,7 @@ namespace APIGenerator
             classContent.AppendLine($"            if (entityToDelete != null)");
             classContent.AppendLine("            {");
             classContent.AppendLine($"                _context.{className}Set.Remove(entityToDelete);");
+            classContent.AppendLine($"            _context.SaveChanges();");
             classContent.AppendLine("            }");
             classContent.AppendLine("        }");
 
@@ -735,7 +738,7 @@ namespace " + apiName + @".WebAPI
                     // Modify property type based on relationship
                     if (relationship.Equals("one to many", StringComparison.OrdinalIgnoreCase))
                     {
-                        propertyType = $"ICollection<{propertyType}>"; // Adjusting for one-to-many relationship
+                        propertyType = $"virtual ICollection<{propertyType}>"; // Adjusting for one-to-many relationship
                     }
 
                     // Annotations as comments - Alternatively, these can be transformed into data annotations
