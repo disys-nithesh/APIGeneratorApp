@@ -1,31 +1,21 @@
 ﻿using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Security.Policy;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using static OfficeOpenXml.ExcelErrorValue;
-
 
 namespace APIGenerator
 {
     public partial class APIGenerator : Form
     {
-        private Dictionary<string, List<Tuple<string, string>>> sheetsData = new Dictionary<string, List<Tuple<string, string>>>();
+        private Dictionary<string, List<Tuple<string, string, string, string>>> sheetsData = new Dictionary<string, List<Tuple<string, string, string, string>>>();
         private string folderPath = string.Empty;
+
         public APIGenerator()
         {
             InitializeComponent();
             this.loadApp();
         }
+
         private void btnProjectLocation_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
@@ -43,6 +33,7 @@ namespace APIGenerator
             }
 
         }
+
         private void btnSourcefile_Click(object sender, EventArgs e)
         {
             if (openFileDialogbox.ShowDialog() == DialogResult.OK)
@@ -75,10 +66,7 @@ namespace APIGenerator
                 }
 
                 txtSourceFilePath.Text = filePath;
-
-                // Now, sheetsData dictionary contains all the sheet names and their corresponding column A and B values.
             }
-
         }
 
         private async void btnCreate_Click(object sender, EventArgs e)
@@ -117,6 +105,7 @@ namespace APIGenerator
                 btnCreate.Enabled = true;  // Re-enable the button
             }
         }
+
         private void ShowOrHideProgressBar(string text)
         {
             if (progressBar.InvokeRequired)
@@ -183,6 +172,7 @@ namespace APIGenerator
                 lblProgressStatus.Text = text;
             }
         }
+
         private void SetConnectionString(string filePath, string connectionString)
         {
             if (File.Exists(filePath))
@@ -204,6 +194,7 @@ namespace APIGenerator
                 Debug.WriteLine($"Error: {filePath} does not exist.");
             }
         }
+
         private void GenerateWebAPI(string apiName, string apiPath, string connectionString)
         {
             // Create a WebAPI project
@@ -303,7 +294,8 @@ namespace APIGenerator
             string infrastructurePath = Path.Combine(apiPath, $"{apiName}.Infrastructure");
             RunMigrationsAndUpdates(migrationPath, infrastructurePath, "InitialCreate", "ApplicationDbContext");
         }
-        public static void GenerateController(string apiName, string apiPath, string className)
+
+        public static void GenerateController(string apiName, string apiPath, string className, string IdName)
         {
             StringBuilder controllerContent = new StringBuilder();
             controllerContent.AppendLine("using Microsoft.AspNetCore.Mvc;");
@@ -333,10 +325,10 @@ namespace APIGenerator
             controllerContent.AppendLine();
 
             // GetById action method
-            controllerContent.AppendLine("        [HttpGet(\"GetById/{id}\")]");
-            controllerContent.AppendLine($"        public ActionResult<{className}> GetById(int id)");
+            controllerContent.AppendLine($"        [HttpGet(\"GetById/{{{IdName}}}\")]");
+            controllerContent.AppendLine($"        public ActionResult<{className}> GetById(int {IdName})");
             controllerContent.AppendLine("        {");
-            controllerContent.AppendLine("            var item = _service.GetById(id);");
+            controllerContent.AppendLine($"            var item = _service.GetById({IdName});");
             controllerContent.AppendLine("            if (item == null)");
             controllerContent.AppendLine("            {");
             controllerContent.AppendLine("                return NotFound();");
@@ -350,34 +342,34 @@ namespace APIGenerator
             controllerContent.AppendLine($"        public IActionResult Add([FromBody] {className} entity)");
             controllerContent.AppendLine("        {");
             controllerContent.AppendLine("            _service.Add(entity);");
-            controllerContent.AppendLine("            return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity);");
+            controllerContent.AppendLine($"            return CreatedAtAction(nameof(GetById), new {{ {IdName} = entity.{IdName} }}, entity);");
             controllerContent.AppendLine("        }");
             controllerContent.AppendLine();
 
             // Update action method
-            controllerContent.AppendLine("        [HttpPut(\"Update/{id}\")]");
-            controllerContent.AppendLine($"        public IActionResult Update(int id, [FromBody] {className} entity)");
+            controllerContent.AppendLine($"        [HttpPut(\"Update/{{{IdName}}}\")]");
+            controllerContent.AppendLine($"        public IActionResult Update(int {IdName}, [FromBody] {className} entity)");
             controllerContent.AppendLine("        {");
-            controllerContent.AppendLine("            if (id != entity.Id)");
+            controllerContent.AppendLine($"            if ({IdName} != entity.{IdName})");
             controllerContent.AppendLine("            {");
             controllerContent.AppendLine("                return BadRequest();");
             controllerContent.AppendLine("            }");
             controllerContent.AppendLine("            _service.Update(entity);");
-            controllerContent.AppendLine("            Ok(\"Record Updated Succesfully\");");
+            controllerContent.AppendLine("            return NoContent();");
             controllerContent.AppendLine("        }");
             controllerContent.AppendLine();
 
             // Delete action method
-            controllerContent.AppendLine("        [HttpDelete(\"Delete/{id}\")]");
-            controllerContent.AppendLine("        public IActionResult Delete(int id)");
+            controllerContent.AppendLine($"        [HttpDelete(\"Delete/{{{IdName}}}\")]");
+            controllerContent.AppendLine($"        public IActionResult Delete(int {IdName})");
             controllerContent.AppendLine("        {");
-            controllerContent.AppendLine("            var existingItem = _service.GetById(id);");
+            controllerContent.AppendLine($"            var existingItem = _service.GetById({IdName});");
             controllerContent.AppendLine("            if (existingItem == null)");
             controllerContent.AppendLine("            {");
             controllerContent.AppendLine("                return NotFound();");
             controllerContent.AppendLine("            }");
-            controllerContent.AppendLine("            _service.Delete(id);");
-            controllerContent.AppendLine("            return Ok(\"Record Deleted Succesfully\");");
+            controllerContent.AppendLine($"            _service.Delete({IdName});");
+            controllerContent.AppendLine("            return NoContent();");
             controllerContent.AppendLine("        }");
 
             controllerContent.AppendLine("    }");
@@ -388,7 +380,8 @@ namespace APIGenerator
             string controllerPath = Path.Combine(controllerDirectory, $"{className}Controller.cs");
             File.WriteAllText(controllerPath, controllerContent.ToString());
         }
-        private void GenerateServiceInterface(string apiName, string apiPath, string className)
+
+        private void GenerateServiceInterface(string apiName, string apiPath, string className, string IdName)
         {
             StringBuilder interfaceContent = new StringBuilder();
             interfaceContent.AppendLine($"namespace {apiName}.Application.IService");
@@ -396,10 +389,10 @@ namespace APIGenerator
             interfaceContent.AppendLine($"    public interface I{className}Service");
             interfaceContent.AppendLine("    {");
             interfaceContent.AppendLine($"        IEnumerable<{className}> GetAll();");
-            interfaceContent.AppendLine($"        {className} GetById(int id);");
+            interfaceContent.AppendLine($"        {className} GetById(int {IdName});");
             interfaceContent.AppendLine($"        void Add({className} entity);");
             interfaceContent.AppendLine($"        void Update({className} entity);");
-            interfaceContent.AppendLine("        void Delete(int id);");
+            interfaceContent.AppendLine($"        void Delete(int {IdName});");
             interfaceContent.AppendLine("    }");
             interfaceContent.AppendLine("}");
             string interfaceDirectory = Path.Combine(apiPath, $"{apiName}.Application", "IService");
@@ -408,7 +401,7 @@ namespace APIGenerator
             File.WriteAllText(interfacePath, interfaceContent.ToString());
         }
 
-        private void GenerateServiceImplementation(string apiName, string apiPath, string className)
+        private void GenerateServiceImplementation(string apiName, string apiPath, string className, string IdName)
         {
             StringBuilder classContent = new StringBuilder();
             classContent.AppendLine($"using {apiName}.Application.IRepository;");
@@ -434,9 +427,9 @@ namespace APIGenerator
 
             // GetById Method
             classContent.AppendLine();
-            classContent.AppendLine($"        public {className} GetById(int id)");
+            classContent.AppendLine($"        public {className} GetById(int {IdName})");
             classContent.AppendLine("        {");
-            classContent.AppendLine("            return _repository.GetById(id);");
+            classContent.AppendLine($"            return _repository.GetById({IdName});");
             classContent.AppendLine("        }");
 
             // Add Method
@@ -455,9 +448,9 @@ namespace APIGenerator
 
             // Delete Method
             classContent.AppendLine();
-            classContent.AppendLine($"        public void Delete(int id)");
+            classContent.AppendLine($"        public void Delete(int {IdName})");
             classContent.AppendLine("        {");
-            classContent.AppendLine("            _repository.Delete(id);");
+            classContent.AppendLine($"            _repository.Delete({IdName});");
             classContent.AppendLine("        }");
 
             classContent.AppendLine("    }");
@@ -468,7 +461,28 @@ namespace APIGenerator
             string classPath = Path.Combine(classDirectory, $"{className}Service.cs");
             File.WriteAllText(classPath, classContent.ToString());
         }
-        private void GenerateRepositoryImplementation(string apiName, string apiPath, string className)
+
+        private void GenerateRepositoryInterface(string apiName, string apiPath, string className, string IdName)
+        {
+            StringBuilder interfaceContent = new StringBuilder();
+            interfaceContent.AppendLine($"namespace {apiName}.Application.IRepository");
+            interfaceContent.AppendLine("{");
+            interfaceContent.AppendLine($"    public interface I{className}Repository");
+            interfaceContent.AppendLine("    {");
+            interfaceContent.AppendLine($"        IEnumerable<{className}> GetAll();");
+            interfaceContent.AppendLine($"        {className} GetById(int {IdName});");
+            interfaceContent.AppendLine($"        void Add({className} entity);");
+            interfaceContent.AppendLine($"        void Update({className} entity);");
+            interfaceContent.AppendLine($"        void Delete(int {IdName});");
+            interfaceContent.AppendLine("    }");
+            interfaceContent.AppendLine("}");
+            string interfaceDirectory = Path.Combine(apiPath, $"{apiName}.Application", "IRepository");
+            Directory.CreateDirectory(interfaceDirectory); // Create the directory if it doesn't exist
+            string interfacePath = Path.Combine(interfaceDirectory, $"I{className}Repository.cs");
+            File.WriteAllText(interfacePath, interfaceContent.ToString());
+        }
+
+        private void GenerateRepositoryImplementation(string apiName, string apiPath, string className, string IdName)
         {
             StringBuilder classContent = new StringBuilder();
             classContent.AppendLine($"using {apiName}.Infrastructure.Data;");
@@ -495,8 +509,6 @@ namespace APIGenerator
             classContent.AppendLine($"        public void Add({className} entity)");
             classContent.AppendLine("        {");
             classContent.AppendLine($"            _context.{className}Set.Add(entity);");
-            classContent.AppendLine($"            _context.SaveChanges();");
-
             classContent.AppendLine("        }");
 
             // Update method
@@ -504,27 +516,24 @@ namespace APIGenerator
             classContent.AppendLine($"        public void Update({className} entity)");
             classContent.AppendLine("        {");
             classContent.AppendLine($"            _context.{className}Set.Update(entity);");
-            classContent.AppendLine($"            _context.SaveChanges();");
-
             classContent.AppendLine("        }");
 
             // Delete method
             classContent.AppendLine();
-            classContent.AppendLine($"        public void Delete(int id)");
+            classContent.AppendLine($"        public void Delete(int {IdName})");
             classContent.AppendLine("        {");
-            classContent.AppendLine($"            var entityToDelete = _context.{className}Set.FirstOrDefault(e => e.Id == id);");
+            classContent.AppendLine($"            var entityToDelete = _context.{className}Set.FirstOrDefault(e => e.{IdName} == {IdName});");
             classContent.AppendLine($"            if (entityToDelete != null)");
             classContent.AppendLine("            {");
             classContent.AppendLine($"                _context.{className}Set.Remove(entityToDelete);");
-            classContent.AppendLine($"                 _context.SaveChanges();");
             classContent.AppendLine("            }");
             classContent.AppendLine("        }");
 
             // GetById method
             classContent.AppendLine();
-            classContent.AppendLine($"        public {className} GetById(int id)");
+            classContent.AppendLine($"        public {className} GetById(int {IdName})");
             classContent.AppendLine("        {");
-            classContent.AppendLine($"            return _context.{className}Set.FirstOrDefault(e => e.Id == id);");
+            classContent.AppendLine($"            return _context.{className}Set.FirstOrDefault(e => e.{IdName} == {IdName});");
             classContent.AppendLine("        }");
 
             classContent.AppendLine("    }");
@@ -535,6 +544,7 @@ namespace APIGenerator
             string classPath = Path.Combine(classDirectory, $"{className}Repository.cs");
             File.WriteAllText(classPath, classContent.ToString());
         }
+
         private void CreateOrUpdateProgramFile(string apiName, string apiPath)
         {
             string programFilePath = Path.Combine(apiPath, $"{apiName}.WebAPI", "Program.cs");
@@ -563,6 +573,7 @@ namespace " + apiName + @".WebAPI
 
             File.WriteAllText(programFilePath, programFileContent);
         }
+
         private void CreateStartupFile(string apiName, string apiPath)
         {
             string startupFilePath = Path.Combine(apiPath, $"{apiName}.WebAPI", "Startup.cs");
@@ -660,26 +671,8 @@ namespace " + apiName + @".WebAPI
 
             File.WriteAllText(startupFilePath, startupFileContent);
         }
-        private void GenerateRepositoryInterface(string apiName, string apiPath, string className)
-        {
-            StringBuilder interfaceContent = new StringBuilder();
-            interfaceContent.AppendLine($"namespace {apiName}.Application.IRepository");
-            interfaceContent.AppendLine("{");
-            interfaceContent.AppendLine($"    public interface I{className}Repository");
-            interfaceContent.AppendLine("    {");
-            interfaceContent.AppendLine($"        IEnumerable<{className}> GetAll();");
-            interfaceContent.AppendLine($"        {className} GetById(int {IdName});");
-            interfaceContent.AppendLine($"        void Add({className} entity);");
-            interfaceContent.AppendLine($"        void Update({className} entity);");
-            interfaceContent.AppendLine($"        void Delete(int {IdName});");
-            interfaceContent.AppendLine("    }");
-            interfaceContent.AppendLine("}");
-            string interfaceDirectory = Path.Combine(apiPath, $"{apiName}.Application", "IRepository");
-            Directory.CreateDirectory(interfaceDirectory); // Create the directory if it doesn't exist
-            string interfacePath = Path.Combine(interfaceDirectory, $"I{className}Repository.cs");
-            File.WriteAllText(interfacePath, interfaceContent.ToString());
-        }
-        private void UpdateApplicationDbContextWithModels(Dictionary<string, List<Tuple<string, string>>> sheetsData, string dbContextPath)
+
+        private void UpdateApplicationDbContextWithModels(Dictionary<string, List<Tuple<string, string, string, string>>> sheetsData, string dbContextPath)
         {
             StringBuilder dbContextAdditions = new StringBuilder();
 
@@ -699,6 +692,7 @@ namespace " + apiName + @".WebAPI
                 File.WriteAllText(dbContextPath, dbContextContent);
             }
         }
+
         public void RunMigrationsAndUpdates(string apiProjectPath, string infrastructureProjectPath, string migrationName, string dbContextName)
         {
             // Add a new migration
@@ -707,32 +701,67 @@ namespace " + apiName + @".WebAPI
             // Update the database with the new migration
             ExecuteCommand($"ef database update --context {dbContextName} --startup-project {apiProjectPath} --project {infrastructureProjectPath}", apiProjectPath);
         }
-        private void GenerateModelClassesFromData(Dictionary<string, List<Tuple<string, string>>> sheetsData, string modelClassPath)
+
+        private void GenerateModelClassesFromData(Dictionary<string, List<Tuple<string, string, string, string>>> sheetsData, string modelClassPath)
         {
+            // Check if the directory exists, create if not
             if (!Directory.Exists(modelClassPath))
             {
                 Directory.CreateDirectory(modelClassPath);
             }
 
+            // Iterate through each entry in the dictionary
             foreach (var sheetEntry in sheetsData)
             {
-                string className = sheetEntry.Key;
-                var properties = sheetEntry.Value;
+                string className = sheetEntry.Key; // Class name from the sheet name
+                var properties = sheetEntry.Value; // List of tuples containing property details
 
+                // Start building the class definition
                 StringBuilder classDefinition = new StringBuilder();
+                classDefinition.AppendLine($"using System.ComponentModel.DataAnnotations;");
+                classDefinition.AppendLine($"using System.ComponentModel.DataAnnotations.Schema;");
+                classDefinition.AppendLine();
                 classDefinition.AppendLine($"public class {className}");
                 classDefinition.AppendLine("{");
 
+                // Iterate through each property (tuple) in the list
                 foreach (var property in properties)
                 {
-                    classDefinition.AppendLine($"    public {property.Item2} {property.Item1} {{ get; set; }}");
+                    string propertyName = property.Item1; // Property name
+                    string propertyType = property.Item2; // Property type
+                    string annotations = property.Item3; // Annotations
+                    string relationship = property.Item4; // Relationship
+
+                    // Modify property type based on relationship
+                    if (relationship.Equals("one to many", StringComparison.OrdinalIgnoreCase))
+                    {
+                        propertyType = $"ICollection<{propertyType}>"; // Adjusting for one-to-many relationship
+                    }
+
+                    // Annotations as comments - Alternatively, these can be transformed into data annotations
+                    if (!string.IsNullOrWhiteSpace(annotations))
+                    {
+                        var annotationsList = annotations.Split(',').ToList();
+                        foreach (var annotation in annotationsList)
+                        {
+                            classDefinition.AppendLine($"[{annotation}]");
+                        }
+                    }
+
+                    // Append property definition to the class
+                    classDefinition.AppendLine($"    public {propertyType} {propertyName} {{ get; set; }}");
+                    classDefinition.AppendLine();
+
                 }
 
+                // Close the class definition
                 classDefinition.AppendLine("}");
 
-                File.WriteAllText($"{modelClassPath}/{className}.cs", classDefinition.ToString());
+                // Write the class definition to a file
+                File.WriteAllText(Path.Combine(modelClassPath, $"{className}.cs"), classDefinition.ToString());
             }
         }
+
         private void GenerateApplicationDbContext(string dbContextPath, string namespaceName)
         {
             StringBuilder dbContextContent = new StringBuilder();
@@ -753,6 +782,7 @@ namespace " + apiName + @".WebAPI
 
             File.WriteAllText(dbContextPath, dbContextContent.ToString());
         }
+
         private void UpdateStartupForRepositoriesAndServices(string apiName, string apiPath)
         {
             string startupPath = Path.Combine(apiPath, $"{apiName}.WebAPI", "Startup.cs");
@@ -775,6 +805,7 @@ namespace " + apiName + @".WebAPI
                 File.WriteAllText(startupPath, existingContent);
             }
         }
+
         private void ExecuteCommand(string command, string? workingDirectory = null)
         {
             var process = new Process
@@ -806,6 +837,7 @@ namespace " + apiName + @".WebAPI
             AppendLog(output);
 
         }
+
         private void AppendLog(string logText)
         {
             // Check if invoking is required and, if so, invoke the method on the UI thread
@@ -826,6 +858,7 @@ namespace " + apiName + @".WebAPI
             chkWithEntity.Checked = true;
             chkWithEntity.Enabled = false;
         }
+
         private void loadApp()
         {
             optNewProject.Visible = true;
@@ -836,7 +869,6 @@ namespace " + apiName + @".WebAPI
         private void optExistingProject_CheckedChanged(object sender, EventArgs e)
         {
             chkWithEntity.Enabled = true;
-
         }
     }
 }
