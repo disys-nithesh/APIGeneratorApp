@@ -79,8 +79,14 @@ namespace APIGenerator
                 UpdateLabel("validating input...");
 
                 string apiName = txtProjectName.Text;
-                string apiPath = folderPath;
+                string apiPath = folderPath+"\\"+apiName;
                 string connectionString = txtConnectionString.Text;
+
+                // Check if the directory exists, create if not
+                if (!Directory.Exists(apiPath))
+                {
+                    Directory.CreateDirectory(apiPath);
+                }
 
                 if (string.IsNullOrEmpty(apiName) || string.IsNullOrEmpty(apiPath))
                 {
