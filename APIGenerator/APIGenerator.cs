@@ -13,7 +13,6 @@ namespace APIGenerator
         public APIGenerator()
         {
             InitializeComponent();
-            this.loadApp();
         }
 
         private void btnProjectLocation_Click(object sender, EventArgs e)
@@ -79,7 +78,7 @@ namespace APIGenerator
                 UpdateLabel("validating input...");
 
                 string apiName = txtProjectName.Text;
-                string apiPath = folderPath+"\\"+apiName;
+                string apiPath = folderPath + "\\" + apiName;
                 string connectionString = txtConnectionString.Text;
 
                 // Check if the directory exists, create if not
@@ -862,22 +861,79 @@ namespace " + apiName + @".WebAPI
             txtLog.ScrollToCaret();
         }
 
-        private void optNewProject_CheckedChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            chkWithEntity.Checked = true;
-            chkWithEntity.Enabled = false;
+            this.Close();
+        }
+        bool CreateProjectExpand = false;
+        bool ExistingProjectExpand = false;
+        private void CreateProjectTranstion_Tick(object sender, EventArgs e)
+        {
+            if (CreateProjectExpand == false)
+            {
+                CreateProjectContainer.Height += 10;
+                if (CreateProjectContainer.Height >= 233)
+                {
+                    CreateProjectTranstion.Stop();
+                    CreateProjectExpand = true;
+                }
+            }
+            else
+            {
+                CreateProjectContainer.Height -= 10;
+                if (CreateProjectContainer.Height <= 72)
+                {
+                    CreateProjectTranstion.Stop();
+                    CreateProjectExpand = false;
+                }
+            }
         }
 
-        private void loadApp()
+        private void btnHome_Click(object sender, EventArgs e)
         {
-            optNewProject.Visible = true;
-            chkWithEntity.Checked = true;
-            chkWithEntity.Enabled = false;
         }
 
-        private void optExistingProject_CheckedChanged(object sender, EventArgs e)
+        private void btnCreateProject_Click(object sender, EventArgs e)
         {
-            chkWithEntity.Enabled = true;
+            CreateProjectTranstion.Start();
+
+        }
+
+        private void btnCPWithoutEntity_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void APIGenerator_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void existingProjectTanstion_Tick(object sender, EventArgs e)
+        {
+            if (ExistingProjectExpand == false)
+            {
+                existingProjectContainer.Height += 10;
+                if (existingProjectContainer.Height >= 205)
+                {
+                    existingProjectTanstion.Stop();
+                    ExistingProjectExpand = true;
+                }
+            }
+            else
+            {
+                existingProjectContainer.Height -= 10;
+                if (existingProjectContainer.Height <= 58)
+                {
+                    existingProjectTanstion.Stop();
+                    ExistingProjectExpand = false;
+                }
+            }
+        }
+
+        private void btnExistingProject_Click(object sender, EventArgs e)
+        {
+            existingProjectTanstion.Start();
         }
     }
 }

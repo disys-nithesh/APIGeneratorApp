@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(APIGenerator));
             tblpnlMain = new TableLayoutPanel();
             pnlTextLable = new Panel();
             lblConnectionSting = new Label();
@@ -36,6 +38,7 @@
             lblProjectName = new Label();
             pnlInputFields = new Panel();
             txtSourceFilePath = new TextBox();
+            btnCreate = new Button();
             txtProjectLocationPath = new TextBox();
             btnSourcefile = new Button();
             txtConnectionString = new TextBox();
@@ -45,49 +48,60 @@
             progressBar = new ProgressBar();
             pnlProgressStatus = new Panel();
             lblProgressStatus = new Label();
-            pnlCheckbox = new Panel();
-            chkAddModel = new CheckBox();
-            optExistingProject = new RadioButton();
-            chkNewProject = new CheckBox();
-            optNewProject = new RadioButton();
-            btnCreate = new Button();
-            chkWithEntity = new CheckBox();
             pnlLog = new Panel();
             txtLog = new RichTextBox();
             chkExistingProject = new CheckBox();
             folderBrowserDialog1 = new FolderBrowserDialog();
             openFileDialogbox = new OpenFileDialog();
+            pnlHeader = new Panel();
+            panel3 = new Panel();
+            pictureBox1 = new PictureBox();
+            btnClose = new Button();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            btnHome = new Button();
+            CreateProjectContainer = new FlowLayoutPanel();
+            btnCreateProject = new Button();
+            btnCPWithoutEntity = new Button();
+            btnCPWithEntity = new Button();
+            existingProjectContainer = new FlowLayoutPanel();
+            btnExistingProject = new Button();
+            btnEPWithEntity = new Button();
+            btnEPWithoutEntity = new Button();
+            CreateProjectTranstion = new System.Windows.Forms.Timer(components);
+            existingProjectTanstion = new System.Windows.Forms.Timer(components);
+            btnCreateModal = new Button();
             tblpnlMain.SuspendLayout();
             pnlTextLable.SuspendLayout();
             pnlInputFields.SuspendLayout();
             pnlProgressBar.SuspendLayout();
             pnlProgressStatus.SuspendLayout();
-            pnlCheckbox.SuspendLayout();
             pnlLog.SuspendLayout();
+            pnlHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
+            CreateProjectContainer.SuspendLayout();
+            existingProjectContainer.SuspendLayout();
             SuspendLayout();
             // 
             // tblpnlMain
             // 
             tblpnlMain.BackColor = SystemColors.Window;
-            tblpnlMain.ColumnCount = 3;
+            tblpnlMain.ColumnCount = 2;
             tblpnlMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tblpnlMain.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 605F));
-            tblpnlMain.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 285F));
+            tblpnlMain.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 644F));
             tblpnlMain.Controls.Add(pnlTextLable, 0, 0);
             tblpnlMain.Controls.Add(pnlInputFields, 1, 0);
             tblpnlMain.Controls.Add(pnlProgressBar, 0, 3);
             tblpnlMain.Controls.Add(pnlProgressStatus, 0, 2);
-            tblpnlMain.Controls.Add(pnlCheckbox, 2, 0);
             tblpnlMain.Controls.Add(pnlLog, 0, 1);
-            tblpnlMain.Dock = DockStyle.Fill;
-            tblpnlMain.Location = new Point(0, 0);
+            tblpnlMain.Location = new Point(309, 57);
             tblpnlMain.Name = "tblpnlMain";
             tblpnlMain.RowCount = 4;
             tblpnlMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tblpnlMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 218F));
             tblpnlMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tblpnlMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tblpnlMain.Size = new Size(1135, 608);
+            tblpnlMain.Size = new Size(1018, 602);
             tblpnlMain.TabIndex = 0;
             // 
             // pnlTextLable
@@ -99,46 +113,46 @@
             pnlTextLable.Dock = DockStyle.Fill;
             pnlTextLable.Location = new Point(3, 3);
             pnlTextLable.Name = "pnlTextLable";
-            pnlTextLable.Size = new Size(239, 290);
+            pnlTextLable.Size = new Size(368, 284);
             pnlTextLable.TabIndex = 0;
             // 
             // lblConnectionSting
             // 
             lblConnectionSting.AutoSize = true;
-            lblConnectionSting.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            lblConnectionSting.Location = new Point(13, 32);
+            lblConnectionSting.Font = new Font("Verdana", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            lblConnectionSting.Location = new Point(20, 32);
             lblConnectionSting.Name = "lblConnectionSting";
-            lblConnectionSting.Size = new Size(208, 31);
+            lblConnectionSting.Size = new Size(180, 20);
             lblConnectionSting.TabIndex = 3;
             lblConnectionSting.Text = "Connection String";
             // 
             // lblSourceFile
             // 
             lblSourceFile.AutoSize = true;
-            lblSourceFile.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            lblSourceFile.Location = new Point(13, 224);
+            lblSourceFile.Font = new Font("Verdana", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            lblSourceFile.Location = new Point(20, 187);
             lblSourceFile.Name = "lblSourceFile";
-            lblSourceFile.Size = new Size(196, 31);
+            lblSourceFile.Size = new Size(176, 20);
             lblSourceFile.TabIndex = 2;
             lblSourceFile.Text = "Source File(.xlsx)";
             // 
             // lblProjectLocation
             // 
             lblProjectLocation.AutoSize = true;
-            lblProjectLocation.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            lblProjectLocation.Location = new Point(13, 163);
+            lblProjectLocation.Font = new Font("Verdana", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            lblProjectLocation.Location = new Point(20, 137);
             lblProjectLocation.Name = "lblProjectLocation";
-            lblProjectLocation.Size = new Size(189, 31);
+            lblProjectLocation.Size = new Size(165, 20);
             lblProjectLocation.TabIndex = 1;
             lblProjectLocation.Text = "Project Location";
             // 
             // lblProjectName
             // 
             lblProjectName.AutoSize = true;
-            lblProjectName.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            lblProjectName.Location = new Point(13, 101);
+            lblProjectName.Font = new Font("Verdana", 10.2F, FontStyle.Bold, GraphicsUnit.Point);
+            lblProjectName.Location = new Point(20, 86);
             lblProjectName.Name = "lblProjectName";
-            lblProjectName.Size = new Size(159, 31);
+            lblProjectName.Size = new Size(137, 20);
             lblProjectName.TabIndex = 0;
             lblProjectName.Text = "Project Name";
             // 
@@ -146,44 +160,61 @@
             // 
             pnlInputFields.AutoSize = true;
             pnlInputFields.Controls.Add(txtSourceFilePath);
+            pnlInputFields.Controls.Add(btnCreate);
             pnlInputFields.Controls.Add(txtProjectLocationPath);
             pnlInputFields.Controls.Add(btnSourcefile);
             pnlInputFields.Controls.Add(txtConnectionString);
             pnlInputFields.Controls.Add(btnProjectLocation);
             pnlInputFields.Controls.Add(txtProjectName);
             pnlInputFields.Dock = DockStyle.Fill;
-            pnlInputFields.Location = new Point(248, 3);
+            pnlInputFields.Location = new Point(377, 3);
             pnlInputFields.Name = "pnlInputFields";
-            pnlInputFields.Size = new Size(599, 290);
+            pnlInputFields.Size = new Size(638, 284);
             pnlInputFields.TabIndex = 1;
             // 
             // txtSourceFilePath
             // 
             txtSourceFilePath.Cursor = Cursors.IBeam;
             txtSourceFilePath.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            txtSourceFilePath.Location = new Point(17, 222);
+            txtSourceFilePath.Location = new Point(22, 176);
             txtSourceFilePath.Name = "txtSourceFilePath";
             txtSourceFilePath.Size = new Size(478, 31);
             txtSourceFilePath.TabIndex = 5;
+            // 
+            // btnCreate
+            // 
+            btnCreate.BackColor = Color.FromArgb(54, 168, 85);
+            btnCreate.Cursor = Cursors.Hand;
+            btnCreate.FlatStyle = FlatStyle.Flat;
+            btnCreate.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCreate.ForeColor = Color.White;
+            btnCreate.Location = new Point(137, 224);
+            btnCreate.Name = "btnCreate";
+            btnCreate.Size = new Size(245, 50);
+            btnCreate.TabIndex = 4;
+            btnCreate.Text = "Create";
+            btnCreate.UseVisualStyleBackColor = false;
+            btnCreate.Click += btnCreate_Click;
             // 
             // txtProjectLocationPath
             // 
             txtProjectLocationPath.Cursor = Cursors.IBeam;
             txtProjectLocationPath.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            txtProjectLocationPath.Location = new Point(17, 161);
+            txtProjectLocationPath.Location = new Point(20, 126);
             txtProjectLocationPath.Name = "txtProjectLocationPath";
             txtProjectLocationPath.Size = new Size(478, 31);
             txtProjectLocationPath.TabIndex = 4;
             // 
             // btnSourcefile
             // 
-            btnSourcefile.BackColor = SystemColors.ControlLight;
+            btnSourcefile.BackColor = Color.FromArgb(54, 168, 85);
             btnSourcefile.Cursor = Cursors.Hand;
+            btnSourcefile.FlatStyle = FlatStyle.Flat;
             btnSourcefile.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnSourcefile.ForeColor = SystemColors.ActiveCaptionText;
-            btnSourcefile.Location = new Point(501, 217);
+            btnSourcefile.ForeColor = Color.White;
+            btnSourcefile.Location = new Point(524, 171);
             btnSourcefile.Name = "btnSourcefile";
-            btnSourcefile.Size = new Size(88, 38);
+            btnSourcefile.Size = new Size(90, 38);
             btnSourcefile.TabIndex = 3;
             btnSourcefile.Text = "Choose File";
             btnSourcefile.UseVisualStyleBackColor = false;
@@ -193,18 +224,19 @@
             // 
             txtConnectionString.Cursor = Cursors.IBeam;
             txtConnectionString.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            txtConnectionString.Location = new Point(17, 32);
+            txtConnectionString.Location = new Point(22, 21);
             txtConnectionString.Name = "txtConnectionString";
             txtConnectionString.Size = new Size(478, 31);
             txtConnectionString.TabIndex = 2;
             // 
             // btnProjectLocation
             // 
-            btnProjectLocation.BackColor = SystemColors.ControlLight;
+            btnProjectLocation.BackColor = Color.FromArgb(54, 168, 85);
             btnProjectLocation.Cursor = Cursors.Hand;
+            btnProjectLocation.FlatStyle = FlatStyle.Flat;
             btnProjectLocation.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnProjectLocation.ForeColor = SystemColors.ActiveCaptionText;
-            btnProjectLocation.Location = new Point(501, 156);
+            btnProjectLocation.ForeColor = Color.White;
+            btnProjectLocation.Location = new Point(524, 123);
             btnProjectLocation.Name = "btnProjectLocation";
             btnProjectLocation.Size = new Size(90, 38);
             btnProjectLocation.TabIndex = 1;
@@ -217,19 +249,19 @@
             // 
             txtProjectName.Cursor = Cursors.IBeam;
             txtProjectName.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            txtProjectName.Location = new Point(17, 101);
+            txtProjectName.Location = new Point(21, 75);
             txtProjectName.Name = "txtProjectName";
             txtProjectName.Size = new Size(478, 31);
             txtProjectName.TabIndex = 0;
             // 
             // pnlProgressBar
             // 
-            tblpnlMain.SetColumnSpan(pnlProgressBar, 3);
+            tblpnlMain.SetColumnSpan(pnlProgressBar, 2);
             pnlProgressBar.Controls.Add(progressBar);
             pnlProgressBar.Dock = DockStyle.Fill;
-            pnlProgressBar.Location = new Point(3, 561);
+            pnlProgressBar.Location = new Point(3, 555);
             pnlProgressBar.Name = "pnlProgressBar";
-            pnlProgressBar.Size = new Size(1129, 44);
+            pnlProgressBar.Size = new Size(1012, 44);
             pnlProgressBar.TabIndex = 2;
             // 
             // progressBar
@@ -237,17 +269,17 @@
             progressBar.Dock = DockStyle.Fill;
             progressBar.Location = new Point(0, 0);
             progressBar.Name = "progressBar";
-            progressBar.Size = new Size(1129, 44);
+            progressBar.Size = new Size(1012, 44);
             progressBar.TabIndex = 1;
             // 
             // pnlProgressStatus
             // 
-            tblpnlMain.SetColumnSpan(pnlProgressStatus, 3);
+            tblpnlMain.SetColumnSpan(pnlProgressStatus, 2);
             pnlProgressStatus.Controls.Add(lblProgressStatus);
             pnlProgressStatus.Dock = DockStyle.Fill;
-            pnlProgressStatus.Location = new Point(3, 517);
+            pnlProgressStatus.Location = new Point(3, 511);
             pnlProgressStatus.Name = "pnlProgressStatus";
-            pnlProgressStatus.Size = new Size(1129, 38);
+            pnlProgressStatus.Size = new Size(1012, 38);
             pnlProgressStatus.TabIndex = 3;
             // 
             // lblProgressStatus
@@ -259,107 +291,16 @@
             lblProgressStatus.Size = new Size(0, 23);
             lblProgressStatus.TabIndex = 0;
             // 
-            // pnlCheckbox
-            // 
-            pnlCheckbox.Controls.Add(chkAddModel);
-            pnlCheckbox.Controls.Add(optExistingProject);
-            pnlCheckbox.Controls.Add(chkNewProject);
-            pnlCheckbox.Controls.Add(optNewProject);
-            pnlCheckbox.Controls.Add(btnCreate);
-            pnlCheckbox.Controls.Add(chkWithEntity);
-            pnlCheckbox.Dock = DockStyle.Fill;
-            pnlCheckbox.Location = new Point(853, 3);
-            pnlCheckbox.Name = "pnlCheckbox";
-            pnlCheckbox.Size = new Size(279, 290);
-            pnlCheckbox.TabIndex = 4;
-            // 
-            // chkAddModel
-            // 
-            chkAddModel.AutoSize = true;
-            chkAddModel.Cursor = Cursors.Hand;
-            chkAddModel.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            chkAddModel.Location = new Point(46, 183);
-            chkAddModel.Name = "chkAddModel";
-            chkAddModel.Size = new Size(155, 35);
-            chkAddModel.TabIndex = 6;
-            chkAddModel.Text = "Add Model";
-            chkAddModel.UseVisualStyleBackColor = true;
-            // 
-            // optExistingProject
-            // 
-            optExistingProject.AutoSize = true;
-            optExistingProject.Cursor = Cursors.Hand;
-            optExistingProject.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            optExistingProject.Location = new Point(46, 79);
-            optExistingProject.Name = "optExistingProject";
-            optExistingProject.Size = new Size(203, 35);
-            optExistingProject.TabIndex = 5;
-            optExistingProject.Text = "Existing Project";
-            optExistingProject.UseVisualStyleBackColor = true;
-            optExistingProject.CheckedChanged += optExistingProject_CheckedChanged;
-            // 
-            // chkNewProject
-            // 
-            chkNewProject.AutoSize = true;
-            chkNewProject.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            chkNewProject.Location = new Point(0, 289);
-            chkNewProject.Name = "chkNewProject";
-            chkNewProject.Size = new Size(166, 35);
-            chkNewProject.TabIndex = 0;
-            chkNewProject.Text = "New Project";
-            chkNewProject.UseVisualStyleBackColor = true;
-            // 
-            // optNewProject
-            // 
-            optNewProject.AutoSize = true;
-            optNewProject.Checked = true;
-            optNewProject.Cursor = Cursors.Hand;
-            optNewProject.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            optNewProject.Location = new Point(46, 28);
-            optNewProject.Name = "optNewProject";
-            optNewProject.Size = new Size(165, 35);
-            optNewProject.TabIndex = 0;
-            optNewProject.TabStop = true;
-            optNewProject.Text = "New Project";
-            optNewProject.UseVisualStyleBackColor = true;
-            optNewProject.CheckedChanged += optNewProject_CheckedChanged;
-            // 
-            // btnCreate
-            // 
-            btnCreate.BackColor = SystemColors.ControlLight;
-            btnCreate.Cursor = Cursors.IBeam;
-            btnCreate.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCreate.ForeColor = SystemColors.ActiveCaptionText;
-            btnCreate.Location = new Point(16, 233);
-            btnCreate.Name = "btnCreate";
-            btnCreate.Size = new Size(245, 50);
-            btnCreate.TabIndex = 4;
-            btnCreate.Text = "Create";
-            btnCreate.UseVisualStyleBackColor = false;
-            btnCreate.Click += btnCreate_Click;
-            // 
-            // chkWithEntity
-            // 
-            chkWithEntity.AutoSize = true;
-            chkWithEntity.Cursor = Cursors.Hand;
-            chkWithEntity.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            chkWithEntity.Location = new Point(46, 132);
-            chkWithEntity.Name = "chkWithEntity";
-            chkWithEntity.Size = new Size(158, 35);
-            chkWithEntity.TabIndex = 2;
-            chkWithEntity.Text = "With Entity";
-            chkWithEntity.UseVisualStyleBackColor = true;
-            // 
             // pnlLog
             // 
             pnlLog.AutoSize = true;
-            tblpnlMain.SetColumnSpan(pnlLog, 3);
+            tblpnlMain.SetColumnSpan(pnlLog, 2);
             pnlLog.Controls.Add(txtLog);
             pnlLog.Controls.Add(chkExistingProject);
             pnlLog.Dock = DockStyle.Fill;
-            pnlLog.Location = new Point(3, 299);
+            pnlLog.Location = new Point(3, 293);
             pnlLog.Name = "pnlLog";
-            pnlLog.Size = new Size(1129, 212);
+            pnlLog.Size = new Size(1012, 212);
             pnlLog.TabIndex = 5;
             // 
             // txtLog
@@ -367,7 +308,7 @@
             txtLog.Dock = DockStyle.Fill;
             txtLog.Location = new Point(0, 0);
             txtLog.Name = "txtLog";
-            txtLog.Size = new Size(1129, 212);
+            txtLog.Size = new Size(1012, 212);
             txtLog.TabIndex = 0;
             txtLog.Text = "";
             // 
@@ -386,16 +327,225 @@
             // 
             openFileDialogbox.FileName = "openFileDialog1";
             // 
+            // pnlHeader
+            // 
+            pnlHeader.BackColor = Color.Black;
+            pnlHeader.Controls.Add(panel3);
+            pnlHeader.Controls.Add(pictureBox1);
+            pnlHeader.Controls.Add(btnClose);
+            pnlHeader.Dock = DockStyle.Top;
+            pnlHeader.Location = new Point(0, 0);
+            pnlHeader.Name = "pnlHeader";
+            pnlHeader.Size = new Size(1328, 56);
+            pnlHeader.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            panel3.Location = new Point(0, 57);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(317, 85);
+            panel3.TabIndex = 4;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(12, 4);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(305, 51);
+            pictureBox1.TabIndex = 4;
+            pictureBox1.TabStop = false;
+            // 
+            // btnClose
+            // 
+            btnClose.Cursor = Cursors.Hand;
+            btnClose.FlatStyle = FlatStyle.Flat;
+            btnClose.Image = (Image)resources.GetObject("btnClose.Image");
+            btnClose.Location = new Point(1282, 12);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(32, 29);
+            btnClose.TabIndex = 3;
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += button1_Click;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.BackColor = Color.FromArgb(219, 70, 59);
+            flowLayoutPanel1.Controls.Add(btnHome);
+            flowLayoutPanel1.Controls.Add(CreateProjectContainer);
+            flowLayoutPanel1.Controls.Add(existingProjectContainer);
+            flowLayoutPanel1.Controls.Add(btnCreateModal);
+            flowLayoutPanel1.Dock = DockStyle.Left;
+            flowLayoutPanel1.Location = new Point(0, 56);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(308, 603);
+            flowLayoutPanel1.TabIndex = 2;
+            // 
+            // btnHome
+            // 
+            btnHome.FlatAppearance.BorderSize = 0;
+            btnHome.FlatStyle = FlatStyle.Flat;
+            btnHome.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnHome.ForeColor = Color.White;
+            btnHome.Location = new Point(0, 0);
+            btnHome.Margin = new Padding(0);
+            btnHome.Name = "btnHome";
+            btnHome.Size = new Size(306, 72);
+            btnHome.TabIndex = 0;
+            btnHome.Text = "Home";
+            btnHome.UseVisualStyleBackColor = true;
+            btnHome.Click += btnHome_Click;
+            // 
+            // CreateProjectContainer
+            // 
+            CreateProjectContainer.BackColor = Color.FromArgb(219, 70, 59);
+            CreateProjectContainer.Controls.Add(btnCreateProject);
+            CreateProjectContainer.Controls.Add(btnCPWithoutEntity);
+            CreateProjectContainer.Controls.Add(btnCPWithEntity);
+            CreateProjectContainer.Location = new Point(0, 72);
+            CreateProjectContainer.Margin = new Padding(0);
+            CreateProjectContainer.Name = "CreateProjectContainer";
+            CreateProjectContainer.Size = new Size(306, 72);
+            CreateProjectContainer.TabIndex = 6;
+            // 
+            // btnCreateProject
+            // 
+            btnCreateProject.FlatAppearance.BorderSize = 0;
+            btnCreateProject.FlatStyle = FlatStyle.Flat;
+            btnCreateProject.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCreateProject.ForeColor = Color.White;
+            btnCreateProject.Location = new Point(3, 3);
+            btnCreateProject.Name = "btnCreateProject";
+            btnCreateProject.Size = new Size(306, 72);
+            btnCreateProject.TabIndex = 1;
+            btnCreateProject.Text = "Create Project";
+            btnCreateProject.UseVisualStyleBackColor = true;
+            btnCreateProject.Click += btnCreateProject_Click;
+            // 
+            // btnCPWithoutEntity
+            // 
+            btnCPWithoutEntity.BackColor = Color.Black;
+            btnCPWithoutEntity.FlatAppearance.BorderSize = 0;
+            btnCPWithoutEntity.FlatStyle = FlatStyle.Flat;
+            btnCPWithoutEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCPWithoutEntity.ForeColor = Color.White;
+            btnCPWithoutEntity.Location = new Point(0, 78);
+            btnCPWithoutEntity.Margin = new Padding(0);
+            btnCPWithoutEntity.Name = "btnCPWithoutEntity";
+            btnCPWithoutEntity.Size = new Size(306, 82);
+            btnCPWithoutEntity.TabIndex = 2;
+            btnCPWithoutEntity.Text = "Without Entity";
+            btnCPWithoutEntity.UseVisualStyleBackColor = false;
+            btnCPWithoutEntity.Click += btnCPWithoutEntity_Click;
+            // 
+            // btnCPWithEntity
+            // 
+            btnCPWithEntity.BackColor = Color.Black;
+            btnCPWithEntity.FlatAppearance.BorderSize = 0;
+            btnCPWithEntity.FlatStyle = FlatStyle.Flat;
+            btnCPWithEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCPWithEntity.ForeColor = Color.White;
+            btnCPWithEntity.Location = new Point(0, 160);
+            btnCPWithEntity.Margin = new Padding(0);
+            btnCPWithEntity.Name = "btnCPWithEntity";
+            btnCPWithEntity.Size = new Size(306, 72);
+            btnCPWithEntity.TabIndex = 0;
+            btnCPWithEntity.Text = "With Entity";
+            btnCPWithEntity.UseVisualStyleBackColor = false;
+            // 
+            // existingProjectContainer
+            // 
+            existingProjectContainer.BackColor = Color.FromArgb(219, 70, 59);
+            existingProjectContainer.Controls.Add(btnExistingProject);
+            existingProjectContainer.Controls.Add(btnEPWithEntity);
+            existingProjectContainer.Controls.Add(btnEPWithoutEntity);
+            existingProjectContainer.Location = new Point(0, 144);
+            existingProjectContainer.Margin = new Padding(0);
+            existingProjectContainer.Name = "existingProjectContainer";
+            existingProjectContainer.Size = new Size(306, 72);
+            existingProjectContainer.TabIndex = 7;
+            // 
+            // btnExistingProject
+            // 
+            btnExistingProject.FlatAppearance.BorderSize = 0;
+            btnExistingProject.FlatStyle = FlatStyle.Flat;
+            btnExistingProject.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnExistingProject.ForeColor = Color.White;
+            btnExistingProject.Location = new Point(3, 3);
+            btnExistingProject.Name = "btnExistingProject";
+            btnExistingProject.Size = new Size(306, 72);
+            btnExistingProject.TabIndex = 1;
+            btnExistingProject.Text = "Enhance Project";
+            btnExistingProject.UseVisualStyleBackColor = true;
+            btnExistingProject.Click += btnExistingProject_Click;
+            // 
+            // btnEPWithEntity
+            // 
+            btnEPWithEntity.BackColor = Color.Black;
+            btnEPWithEntity.FlatAppearance.BorderSize = 0;
+            btnEPWithEntity.FlatStyle = FlatStyle.Flat;
+            btnEPWithEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnEPWithEntity.ForeColor = Color.White;
+            btnEPWithEntity.Location = new Point(0, 78);
+            btnEPWithEntity.Margin = new Padding(0);
+            btnEPWithEntity.Name = "btnEPWithEntity";
+            btnEPWithEntity.Size = new Size(306, 72);
+            btnEPWithEntity.TabIndex = 0;
+            btnEPWithEntity.Text = "With Entity";
+            btnEPWithEntity.UseVisualStyleBackColor = false;
+            // 
+            // btnEPWithoutEntity
+            // 
+            btnEPWithoutEntity.BackColor = Color.Black;
+            btnEPWithoutEntity.FlatAppearance.BorderSize = 0;
+            btnEPWithoutEntity.FlatStyle = FlatStyle.Flat;
+            btnEPWithoutEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnEPWithoutEntity.ForeColor = Color.White;
+            btnEPWithoutEntity.Location = new Point(0, 150);
+            btnEPWithoutEntity.Margin = new Padding(0);
+            btnEPWithoutEntity.Name = "btnEPWithoutEntity";
+            btnEPWithoutEntity.Size = new Size(306, 82);
+            btnEPWithoutEntity.TabIndex = 2;
+            btnEPWithoutEntity.Text = "Without Entity";
+            btnEPWithoutEntity.UseVisualStyleBackColor = false;
+            // 
+            // CreateProjectTranstion
+            // 
+            CreateProjectTranstion.Interval = 1;
+            CreateProjectTranstion.Tick += CreateProjectTranstion_Tick;
+            // 
+            // existingProjectTanstion
+            // 
+            existingProjectTanstion.Interval = 1;
+            existingProjectTanstion.Tick += existingProjectTanstion_Tick;
+            // 
+            // btnCreateModal
+            // 
+            btnCreateModal.FlatAppearance.BorderSize = 0;
+            btnCreateModal.FlatStyle = FlatStyle.Flat;
+            btnCreateModal.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCreateModal.ForeColor = Color.White;
+            btnCreateModal.Location = new Point(0, 216);
+            btnCreateModal.Margin = new Padding(0);
+            btnCreateModal.Name = "btnCreateModal";
+            btnCreateModal.Size = new Size(306, 72);
+            btnCreateModal.TabIndex = 8;
+            btnCreateModal.Text = "Create Model";
+            btnCreateModal.UseVisualStyleBackColor = true;
+            // 
             // APIGenerator
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1135, 608);
+            ClientSize = new Size(1328, 659);
+            Controls.Add(flowLayoutPanel1);
+            Controls.Add(pnlHeader);
             Controls.Add(tblpnlMain);
+            FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
             Name = "APIGenerator";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "APIGenerator";
+            Load += APIGenerator_Load;
             tblpnlMain.ResumeLayout(false);
             tblpnlMain.PerformLayout();
             pnlTextLable.ResumeLayout(false);
@@ -405,10 +555,13 @@
             pnlProgressBar.ResumeLayout(false);
             pnlProgressStatus.ResumeLayout(false);
             pnlProgressStatus.PerformLayout();
-            pnlCheckbox.ResumeLayout(false);
-            pnlCheckbox.PerformLayout();
             pnlLog.ResumeLayout(false);
             pnlLog.PerformLayout();
+            pnlHeader.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            CreateProjectContainer.ResumeLayout(false);
+            existingProjectContainer.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -431,19 +584,30 @@
         private Panel pnlProgressBar;
         private Panel pnlProgressStatus;
         private Label lblProgressStatus;
-        private Panel pnlCheckbox;
         private CheckBox chkExistingProject;
         private CheckBox chk;
-        private CheckBox chkWithEntity;
         private Button btnCreate;
         private Panel pnlLog;
         private RichTextBox txtLog;
         private TextBox txtSourceFilePath;
         private TextBox txtProjectLocationPath;
         private RadioButton radioButton1;
-        private CheckBox chkNewProject;
-        private RadioButton optNewProject;
-        private RadioButton optExistingProject;
-        private CheckBox chkAddModel;
+        private Panel pnlHeader;
+        private Button btnClose;
+        private PictureBox pictureBox1;
+        private Panel panel3;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Button btnHome;
+        private FlowLayoutPanel CreateProjectContainer;
+        private Button btnCreateProject;
+        private Button btnCPWithEntity;
+        private Button btnCPWithoutEntity;
+        private System.Windows.Forms.Timer CreateProjectTranstion;
+        private FlowLayoutPanel existingProjectContainer;
+        private Button btnExistingProject;
+        private Button btnEPWithoutEntity;
+        private Button btnEPWithEntity;
+        private System.Windows.Forms.Timer existingProjectTanstion;
+        private Button btnCreateModal;
     }
 }
