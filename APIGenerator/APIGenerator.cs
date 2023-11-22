@@ -97,7 +97,23 @@ namespace APIGenerator
                 UpdateLabel("task completed...");
                 UpdateProgressBar(100);
 
-                MessageBox.Show("API generated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult result = MessageBox.Show($"API generated successfully..! Do you want to navigate '{apiName}' Application? ", "Success", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+                if (result == DialogResult.OK)
+                {
+                    try
+                    {
+                        // Open the file
+                        string visualStudioPath = @"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe";
+                        string solnPath = apiPath + "\\" + apiName + ".sln";
+                        System.Diagnostics.Process.Start(visualStudioPath, solnPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle exceptions, for example, file not found
+                        MessageBox.Show("Error opening file: " + ex.Message);
+                    }
+                }
             }
             catch (Exception ex)
             {
