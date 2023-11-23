@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
+using System.Data;
 using System.Diagnostics;
 using System.Text;
 
@@ -13,6 +14,7 @@ namespace APIGenerator
         public APIGenerator()
         {
             InitializeComponent();
+
         }
 
         private void btnProjectLocation_Click(object sender, EventArgs e)
@@ -930,7 +932,7 @@ namespace " + apiName + @".WebAPI
             if (ExistingProjectExpand == false)
             {
                 existingProjectContainer.Height += 10;
-                if (existingProjectContainer.Height >= 205)
+                if (existingProjectContainer.Height >= 233)
                 {
                     existingProjectTanstion.Stop();
                     ExistingProjectExpand = true;
@@ -939,7 +941,7 @@ namespace " + apiName + @".WebAPI
             else
             {
                 existingProjectContainer.Height -= 10;
-                if (existingProjectContainer.Height <= 58)
+                if (existingProjectContainer.Height <= 72)
                 {
                     existingProjectTanstion.Stop();
                     ExistingProjectExpand = false;
@@ -950,6 +952,12 @@ namespace " + apiName + @".WebAPI
         private void btnExistingProject_Click(object sender, EventArgs e)
         {
             existingProjectTanstion.Start();
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            TestConnection frm = new TestConnection(this);
+            frm.Show();
         }
     }
 }

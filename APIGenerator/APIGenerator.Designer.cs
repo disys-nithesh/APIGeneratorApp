@@ -37,11 +37,12 @@
             lblProjectLocation = new Label();
             lblProjectName = new Label();
             pnlInputFields = new Panel();
+            txtConnectionString = new TextBox();
+            btnAdd = new Button();
             txtSourceFilePath = new TextBox();
             btnCreate = new Button();
             txtProjectLocationPath = new TextBox();
             btnSourcefile = new Button();
-            txtConnectionString = new TextBox();
             btnProjectLocation = new Button();
             txtProjectName = new TextBox();
             pnlProgressBar = new Panel();
@@ -67,9 +68,9 @@
             btnExistingProject = new Button();
             btnEPWithEntity = new Button();
             btnEPWithoutEntity = new Button();
+            btnCreateModal = new Button();
             CreateProjectTranstion = new System.Windows.Forms.Timer(components);
             existingProjectTanstion = new System.Windows.Forms.Timer(components);
-            btnCreateModal = new Button();
             tblpnlMain.SuspendLayout();
             pnlTextLable.SuspendLayout();
             pnlInputFields.SuspendLayout();
@@ -159,11 +160,12 @@
             // pnlInputFields
             // 
             pnlInputFields.AutoSize = true;
+            pnlInputFields.Controls.Add(txtConnectionString);
+            pnlInputFields.Controls.Add(btnAdd);
             pnlInputFields.Controls.Add(txtSourceFilePath);
             pnlInputFields.Controls.Add(btnCreate);
             pnlInputFields.Controls.Add(txtProjectLocationPath);
             pnlInputFields.Controls.Add(btnSourcefile);
-            pnlInputFields.Controls.Add(txtConnectionString);
             pnlInputFields.Controls.Add(btnProjectLocation);
             pnlInputFields.Controls.Add(txtProjectName);
             pnlInputFields.Dock = DockStyle.Fill;
@@ -172,11 +174,37 @@
             pnlInputFields.Size = new Size(638, 284);
             pnlInputFields.TabIndex = 1;
             // 
+            // txtConnectionString
+            // 
+            txtConnectionString.Cursor = Cursors.IBeam;
+            txtConnectionString.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
+            txtConnectionString.Location = new Point(20, 31);
+            txtConnectionString.Margin = new Padding(0);
+            txtConnectionString.Name = "txtConnectionString";
+            txtConnectionString.Size = new Size(478, 31);
+            txtConnectionString.TabIndex = 7;
+            // 
+            // btnAdd
+            // 
+            btnAdd.BackColor = Color.FromArgb(54, 168, 85);
+            btnAdd.Cursor = Cursors.Hand;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            btnAdd.ForeColor = Color.White;
+            btnAdd.Location = new Point(524, 31);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(90, 37);
+            btnAdd.TabIndex = 6;
+            btnAdd.Text = "Build";
+            btnAdd.TextAlign = ContentAlignment.TopCenter;
+            btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.Click += btnAdd_Click;
+            // 
             // txtSourceFilePath
             // 
             txtSourceFilePath.Cursor = Cursors.IBeam;
             txtSourceFilePath.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            txtSourceFilePath.Location = new Point(22, 176);
+            txtSourceFilePath.Location = new Point(20, 176);
             txtSourceFilePath.Name = "txtSourceFilePath";
             txtSourceFilePath.Size = new Size(478, 31);
             txtSourceFilePath.TabIndex = 5;
@@ -216,18 +244,9 @@
             btnSourcefile.Name = "btnSourcefile";
             btnSourcefile.Size = new Size(90, 38);
             btnSourcefile.TabIndex = 3;
-            btnSourcefile.Text = "Choose File";
+            btnSourcefile.Text = "Select";
             btnSourcefile.UseVisualStyleBackColor = false;
             btnSourcefile.Click += btnSourcefile_Click;
-            // 
-            // txtConnectionString
-            // 
-            txtConnectionString.Cursor = Cursors.IBeam;
-            txtConnectionString.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point);
-            txtConnectionString.Location = new Point(22, 21);
-            txtConnectionString.Name = "txtConnectionString";
-            txtConnectionString.Size = new Size(478, 31);
-            txtConnectionString.TabIndex = 2;
             // 
             // btnProjectLocation
             // 
@@ -240,7 +259,7 @@
             btnProjectLocation.Name = "btnProjectLocation";
             btnProjectLocation.Size = new Size(90, 38);
             btnProjectLocation.TabIndex = 1;
-            btnProjectLocation.Text = "Choose Folder";
+            btnProjectLocation.Text = "Select";
             btnProjectLocation.UseMnemonic = false;
             btnProjectLocation.UseVisualStyleBackColor = false;
             btnProjectLocation.Click += btnProjectLocation_Click;
@@ -413,7 +432,8 @@
             btnCreateProject.FlatStyle = FlatStyle.Flat;
             btnCreateProject.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnCreateProject.ForeColor = Color.White;
-            btnCreateProject.Location = new Point(3, 3);
+            btnCreateProject.Location = new Point(0, 0);
+            btnCreateProject.Margin = new Padding(0);
             btnCreateProject.Name = "btnCreateProject";
             btnCreateProject.Size = new Size(306, 72);
             btnCreateProject.TabIndex = 1;
@@ -428,7 +448,7 @@
             btnCPWithoutEntity.FlatStyle = FlatStyle.Flat;
             btnCPWithoutEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnCPWithoutEntity.ForeColor = Color.White;
-            btnCPWithoutEntity.Location = new Point(0, 78);
+            btnCPWithoutEntity.Location = new Point(0, 72);
             btnCPWithoutEntity.Margin = new Padding(0);
             btnCPWithoutEntity.Name = "btnCPWithoutEntity";
             btnCPWithoutEntity.Size = new Size(306, 82);
@@ -444,7 +464,7 @@
             btnCPWithEntity.FlatStyle = FlatStyle.Flat;
             btnCPWithEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnCPWithEntity.ForeColor = Color.White;
-            btnCPWithEntity.Location = new Point(0, 160);
+            btnCPWithEntity.Location = new Point(0, 154);
             btnCPWithEntity.Margin = new Padding(0);
             btnCPWithEntity.Name = "btnCPWithEntity";
             btnCPWithEntity.Size = new Size(306, 72);
@@ -470,7 +490,8 @@
             btnExistingProject.FlatStyle = FlatStyle.Flat;
             btnExistingProject.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnExistingProject.ForeColor = Color.White;
-            btnExistingProject.Location = new Point(3, 3);
+            btnExistingProject.Location = new Point(0, 0);
+            btnExistingProject.Margin = new Padding(0);
             btnExistingProject.Name = "btnExistingProject";
             btnExistingProject.Size = new Size(306, 72);
             btnExistingProject.TabIndex = 1;
@@ -485,7 +506,7 @@
             btnEPWithEntity.FlatStyle = FlatStyle.Flat;
             btnEPWithEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnEPWithEntity.ForeColor = Color.White;
-            btnEPWithEntity.Location = new Point(0, 78);
+            btnEPWithEntity.Location = new Point(0, 72);
             btnEPWithEntity.Margin = new Padding(0);
             btnEPWithEntity.Name = "btnEPWithEntity";
             btnEPWithEntity.Size = new Size(306, 72);
@@ -500,23 +521,13 @@
             btnEPWithoutEntity.FlatStyle = FlatStyle.Flat;
             btnEPWithoutEntity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
             btnEPWithoutEntity.ForeColor = Color.White;
-            btnEPWithoutEntity.Location = new Point(0, 150);
+            btnEPWithoutEntity.Location = new Point(0, 144);
             btnEPWithoutEntity.Margin = new Padding(0);
             btnEPWithoutEntity.Name = "btnEPWithoutEntity";
             btnEPWithoutEntity.Size = new Size(306, 82);
             btnEPWithoutEntity.TabIndex = 2;
             btnEPWithoutEntity.Text = "Without Entity";
             btnEPWithoutEntity.UseVisualStyleBackColor = false;
-            // 
-            // CreateProjectTranstion
-            // 
-            CreateProjectTranstion.Interval = 1;
-            CreateProjectTranstion.Tick += CreateProjectTranstion_Tick;
-            // 
-            // existingProjectTanstion
-            // 
-            existingProjectTanstion.Interval = 1;
-            existingProjectTanstion.Tick += existingProjectTanstion_Tick;
             // 
             // btnCreateModal
             // 
@@ -531,6 +542,16 @@
             btnCreateModal.TabIndex = 8;
             btnCreateModal.Text = "Create Model";
             btnCreateModal.UseVisualStyleBackColor = true;
+            // 
+            // CreateProjectTranstion
+            // 
+            CreateProjectTranstion.Interval = 1;
+            CreateProjectTranstion.Tick += CreateProjectTranstion_Tick;
+            // 
+            // existingProjectTanstion
+            // 
+            existingProjectTanstion.Interval = 1;
+            existingProjectTanstion.Tick += existingProjectTanstion_Tick;
             // 
             // APIGenerator
             // 
@@ -578,7 +599,6 @@
         private Button btnProjectLocation;
         private Label lblConnectionSting;
         private Button btnSourcefile;
-        private TextBox txtConnectionString;
         private OpenFileDialog openFileDialogbox;
         private ProgressBar progressBar;
         private Panel pnlProgressBar;
@@ -609,5 +629,7 @@
         private Button btnEPWithEntity;
         private System.Windows.Forms.Timer existingProjectTanstion;
         private Button btnCreateModal;
+        private Button btnAdd;
+        public TextBox txtConnectionString;
     }
 }
